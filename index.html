@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <title>N.U.T.T.E</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: black;
+        }
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="canvas"></canvas>
+
+<script>
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener("resize", resize);
+
+// Matrix-baggrund
+const chars = "01";
+const fontSize = 18;
+let columns = Math.floor(canvas.width / fontSize);
+let drops = Array(columns).fill(1);
+
+// Knap-data med links
+const buttons = [
+    { text: "Mini_vufi", x: 0, y: 0, w: 180, h: 45, hover: false, link: "1.html" },
+    { text: "Orangotang", x: 0, y: 0, w: 180, h: 45, hover: false, link: "2.html" },
+    { text: "Kasper", x: 0, y: 0, w: 180, h: 45, hover: false, link: "3.html" },
+    { text: "Store-vufi", x: 0, y: 0, w: 180, h: 45, hover: false, link: "4.html" }
+];
+
+function drawMatrix() {
+    ctx.fillStyle = "rgba(0,0,0,0.08)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = "#00ff66";
+    ctx.font = fontSize + "px monospace";
+
+    for (let i = 0; i < drops.length; i++) {
+        const char = chars[Math.floor(Math.random() * chars.length)];
+        ctx.fillText(char, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+            drops[i] = 0;
+        }
+        drops[i]++;
+    }
+}
+
+function drawTitle() {
+    ctx.textAlign = "center";
+
+    const baseX = canvas.width / 2;
+    const baseY = canvas.height / 2 - 160;
+
+    // Glitch-effekt
+    for (let i = 0; i < 3; i++) {
+        const offsetX = (Math.random() - 0.5) * 6;
+        const offsetY = (Math.random() - 0.5) * 6;
+        ctx.font = "bold 64px monospace";
+        ctx.fillStyle = "rgba(0,255,102,0.6)";
+        ctx.fillText("N.U.T.T.E", baseX + offsetX, baseY + offsetY);
+    }
+
+    // Hovedtitel
+    ctx.font = "bold 64px monospace";
+    ctx.fillStyle = "#00ff66";
+    ctx.shadowColor = "#00ff66";
+    ctx.shadowBlur = 20;
+    ctx.fillText("N.U.T.T.E", baseX, baseY);
+    ctx.shadowBlur = 0;
+
+    // Undertekst
+    ctx.font = "18px monospace";
+    ctx.fillStyle = "#00cc55";
+    ctx.fillText("Nice Ultra Transformer Tracker Elite.", baseX, baseY + 30);
+}
+
+function drawButtons() {
+    const startY = canvas.height / 2 - 20;
+
+    buttons.forEach((btn, i) => {
+        btn.x = canvas.width / 2 - btn.w / 2;
+        btn.y = startY + i * 65;
+
+        // Glitch ved hover
+        const glitchX = btn.hover ? (Math.random() - 0.5) * 4 : 0;
+        const glitchY = btn.hover ? (Math.random() - 0.5) * 4 : 0;
+
+        ctx.strokeStyle = btn.hover ? "#66ff99" : "#00ff66";
+        ctx.lineWidth = 2;
+        ctx.strokeRect(btn.x + glitchX, btn.y + glitchY, btn.w, btn.h);
+
+        ctx.fillStyle = btn.hover ? "rgba(0,255,102,0.2)" : "rgba(0,0,0,0.7)";
+        ctx.fillRect(btn.x + glitchX, btn.y + glitchY, btn.w, btn.h);
+
+        ctx.fillStyle = "#00ff66";
+        ctx.font = "20px monospace";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(btn.text, btn.x + btn.w / 2 + glitchX, btn.y + btn.h / 2 + glitchY);
+    });
+}
+
+function animate() {
+    drawMatrix();
+    drawTitle();
+    drawButtons();
+    requestAnimationFrame(animate);
+}
+
+animate();
+
+// Hover-detektion
+canvas.addEventListener("mousemove", (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+
+    buttons.forEach(btn => {
+        btn.hover = (
+            mx >= btn.x && mx <= btn.x + btn.w &&
+            my >= btn.y && my <= btn.y + btn.h
+        );
+    });
+});
+
+// Klik-detektion
+canvas.addEventListener("click", (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+
+    buttons.forEach(btn => {
+        if (mx >= btn.x && mx <= btn.x + btn.w && my >= btn.y && my <= btn.y + btn.h) {
+            window.location.href = btn.link;
+        }
+    });
+});
+</script>
+
+</body>
+</html>
