@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <title>STORE VUFI!!!!</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: monospace;
+    }
+
+    body {
+      background: black;
+      color: #ff0000;
+      overflow: hidden;
+      height: 100vh;
+      position: relative;
+      animation: shake 0.05s infinite;
+    }
+
+    @keyframes shake {
+      0% { transform: translate(0,0); }
+      25% { transform: translate(5px, -5px); }
+      50% { transform: translate(-5px, 5px); }
+      75% { transform: translate(5px, 5px); }
+      100% { transform: translate(-5px, -5px); }
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+
+    .content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    h1 {
+      font-size: 50px;
+      color: #ff0000;
+      text-shadow: 0 0 20px #ff0000, 0 0 40px #ff0000;
+      margin-bottom: 20px;
+    }
+
+    img {
+      width: 350px;
+      border-radius: 12px;
+      box-shadow: 0 0 30px #ff0000;
+      margin-bottom: 20px;
+    }
+
+    .text {
+      font-size: 18px;
+      color: #ff0000;
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="matrix"></canvas>
+
+  <div class="content">
+    <h1>STORE VUFI!!!!</h1>
+    <img src="Show/storevufi.jpeg" alt="Store Vufi">
+    <div class="text">AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</div>
+  </div>
+
+  <script>
+    // Matrix effekten med rød
+    const canvas = document.getElementById("matrix");
+    const ctx = canvas.getContext("2d");
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener("resize", resize);
+
+    const symbols = "01";
+    const fontSize = 16;
+    const columns = Math.floor(canvas.width / fontSize);
+    const drops = Array(columns).fill(1);
+
+    function draw() {
+      ctx.fillStyle = "rgba(0,0,0,0.05)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = "#ff0000";
+      ctx.font = fontSize + "px monospace";
+
+      for (let i = 0; i < drops.length; i++) {
+        const char = symbols[Math.floor(Math.random() * symbols.length)];
+        ctx.fillText(char, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+    }
+
+    setInterval(draw, 33);
+
+    // Redirect efter 6 sekunder
+    setTimeout(() => {
+      window.location.href = "https://www.ravbug.com/bsod/bsod10/";
+    }, 6000);
+  </script>
+
+</body>
+</html>
