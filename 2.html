@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <title>Orangotang</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: monospace;
+    }
+
+    body {
+      background: black;
+      color: #00ff00;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Matrix baggrund */
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+
+    /* Tilbage-knap */
+    .back {
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      text-decoration: none;
+      color: #00ff00;
+      font-size: 28px;
+      border: 2px solid #00ff00;
+      padding: 6px 12px;
+      border-radius: 8px;
+      transition: 0.2s;
+    }
+
+    .back:hover {
+      background: #00ff00;
+      color: black;
+    }
+
+    /* Indhold */
+    .content {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 15px;
+      text-shadow: 0 0 10px #00ff00;
+    }
+
+    img {
+      width: 260px;
+      margin-bottom: 15px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px #00ff00;
+    }
+
+    .text {
+      font-size: 22px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Matrix canvas -->
+  <canvas id="matrix"></canvas>
+
+  <!-- Tilbage -->
+  <a href="index.html" class="back">←</a>
+
+  <!-- Indhold -->
+  <div class="content">
+    <h1>Orangotang</h1>
+    <img src="Show/orangotang.jpeg" alt="Orangotang">
+    <div class="text">U U A A</div>
+  </div>
+
+  <!-- Matrix script -->
+  <script>
+    const canvas = document.getElementById("matrix");
+    const ctx = canvas.getContext("2d");
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener("resize", resize);
+
+    const symbols = "01";
+    const fontSize = 16;
+    const columns = Math.floor(canvas.width / fontSize);
+    const drops = Array(columns).fill(1);
+
+    function draw() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = "#00ff00";
+      ctx.font = fontSize + "px monospace";
+
+      for (let i = 0; i < drops.length; i++) {
+        const char = symbols[Math.floor(Math.random() * symbols.length)];
+        ctx.fillText(char, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+    }
+
+    setInterval(draw, 33);
+  </script>
+
+</body>
+</html>
